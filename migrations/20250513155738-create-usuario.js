@@ -13,7 +13,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       correo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       password: {
         type: Sequelize.STRING
@@ -25,11 +26,23 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false
       },
+      googleId: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      facebookId: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      linkedinId: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       rolId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        defaultValue: 1,
         references: {
-          defaultValue: 1,
           model: 'Roles',
           key: 'id'
         }
@@ -41,6 +54,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true
       }
     });
   },

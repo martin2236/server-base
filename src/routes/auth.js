@@ -3,8 +3,9 @@ const { check } = require('express-validator');
 const multerUpload = require('../helpers/multer'); 
 const {validarCampos} = require('../middlewares/validarCampos');
 const { esEmailUnico } = require('../middlewares/db-validators');
+const passport = require('../helpers/passport');
 
-const { login, register, validarUsuario } = require('../controllers/auth');
+const { login, register, validarUsuario, linkedinLogin, googleLogin } = require('../controllers/auth');
 
 const router = Router();
 
@@ -20,5 +21,17 @@ router.post('/register', [
     check('correo').custom(esEmailUnico),
     validarCampos
 ],register); 
+
+ router.get('/linkedin',passport.authenticate('linkedin', { session:false }));
+  
+ router.get('/linkedin/callback',
+    passport.authenticate('linkedin', { session:false, failureRedirect:'/login' }),linkedinLogin);
+
+ router.get('/google', passport.authenticate('google', {
+        scope: ['profile', 'email']
+      }));
+      
+ router.get('/api/auth/google/callback',
+        passport.authenticate('google', { failureRedirect: '/login' }),googleLogin);
 
 module.exports = router

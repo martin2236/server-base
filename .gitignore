@@ -1,2 +1,34 @@
-node_modules
+# Node modules
+node_modules/
+
+# Entornos
 .env
+.env.*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sequelize
+*.sqlite
+*.sqlite3
+*.log
+.sequelizerc
+
+# Docker
+**/tmp
+**/dist
+docker-volume-data/
+
+# VSCode settings (opcional, si no compartís configuraciones de editor)
+.vscode/
+
+# Coverage y build (si usás test o bundling)
+coverage/
+build/
+dist/
+
+# Sistema
+.DS_Store
+Thumbs.db

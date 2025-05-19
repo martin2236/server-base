@@ -21,6 +21,18 @@ module.exports = (sequelize, DataTypes) => {
     correo: DataTypes.STRING,
     password: DataTypes.STRING,
     imagen: DataTypes.STRING,
+    googleId: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    facebookId: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    linkedinId: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     verificado: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
@@ -37,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Usuario',
+    paranoid: true,
   });
   return Usuario;
 };

@@ -175,9 +175,20 @@ const validarUsuario = async (req = request, res = response) => {
   }
 };
 
+const linkedinLogin = async (req, res) => {
+  const token = generarJWT(req.user.id, req.user.correo);
+  res.redirect(`${process.env.HOST_API}/api/auth/callback?token=${token}`);
+};
+
+const googleLogin = async (req, res) => {
+  const token = generarJWT(req.user.id, req.user.correo);
+  res.redirect(`${process.env.HOST_API}/api/auth/callback?token=${token}`);
+};
 
 module.exports = {
     login,
     register,
-    validarUsuario
+    validarUsuario,
+    linkedinLogin,
+    googleLogin
 }
