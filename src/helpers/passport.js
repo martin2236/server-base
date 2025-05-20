@@ -31,9 +31,12 @@ passport.use(new GoogleStrategy({
     if (!user) {
       user = await Usuario.create({
         nombre: profile.displayName,
-        email: profile.emails[0].value,
+        correo: profile.emails[0].value,
         googleId: profile.id,
-        validado: true // ya está validado desde Google
+        password: "234sf" + profile.id + "as23",
+        imagen: profile.photos[0].value,
+        rolId:1,
+        verificado: true
       });
     }
     done(null, user);

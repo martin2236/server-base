@@ -24,14 +24,21 @@ router.post('/register', [
 
  router.get('/linkedin',passport.authenticate('linkedin', { session:false }));
   
- router.get('/linkedin/callback',
-    passport.authenticate('linkedin', { session:false, failureRedirect:'/login' }),linkedinLogin);
+
+ router.get(
+        '/linkedin/callback',
+        passport.authenticate('linkedin', { failureRedirect: '/login', session: false }),
+        linkedinLogin
+      );
 
  router.get('/google', passport.authenticate('google', {
         scope: ['profile', 'email']
       }));
       
- router.get('/api/auth/google/callback',
-        passport.authenticate('google', { failureRedirect: '/login' }),googleLogin);
+ router.get(
+       '/google/callback',
+        passport.authenticate('google', { failureRedirect: '/login', session: false }),
+        googleLogin
+        );
 
 module.exports = router

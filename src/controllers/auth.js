@@ -5,6 +5,8 @@ const { Usuario, Role } = require('../../models');
 const {guardarArchivo} = require('../helpers/subir-archivo');
 const { enviarEmailVerificacion } = require('../helpers/enviarEmail');
 
+
+//LOGIN
 const login = async (req = request, res = response) => {
   
   try {
@@ -18,7 +20,7 @@ const login = async (req = request, res = response) => {
         data: null
       });
     }
-
+   
     if (!user.verificado) {
       return res.status(403).json({
         success: false,
@@ -62,7 +64,7 @@ const login = async (req = request, res = response) => {
   }
 };
 
-
+//REGISTER
 const register = async (req = request, res = response) => {
   try {
     const { nombre, correo, password } = req.body;
@@ -115,8 +117,8 @@ const register = async (req = request, res = response) => {
       nombre: nuevoUsuario.nombre,
       correo: nuevoUsuario.correo,
       imagen: nuevoUsuario.imagen,
+      verificado: nuevoUsuario.verificado,
       rol:rol.nombre,
-      token,
     };
 
     return res.status(201).json({ 
@@ -134,6 +136,7 @@ const register = async (req = request, res = response) => {
   }
 };
 
+//VALIDAR USUARIO
 const validarUsuario = async (req = request, res = response) => {
   const { token } = req.params;
 
@@ -175,20 +178,74 @@ const validarUsuario = async (req = request, res = response) => {
   }
 };
 
+//LOGIN LINKEDIN
 const linkedinLogin = async (req, res) => {
-  const token = generarJWT(req.user.id, req.user.correo);
-  res.redirect(`${process.env.HOST_API}/api/auth/callback?token=${token}`);
+  const token = jwt.sign(
+    { id: req.user.id },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+  return res.status(200).json({
+    success: true,
+    msg: 'Login exitoso',
+    data: {
+      token,
+    },
+  });
 };
 
+//LOGIN GOOGLE
 const googleLogin = async (req, res) => {
-  const token = generarJWT(req.user.id, req.user.correo);
-  res.redirect(`${process.env.HOST_API}/api/auth/callback?token=${token}`);
+  const token = jwt.sign(
+    { id: req.user.id },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+  return res.status(200).json({
+    success: true,
+    msg: 'Login exitoso',
+    data: {
+      token,
+    },
+  });
 };
+
+//GET USER
+const getUser = async (req, res) => {
+  const token = req.query.token;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET); 
+    const usuario = await Usuario.findById(payload);
+    if (!usuario) {
+      return res.status(404).json({
+        success:false, 
+        msg: 'Usuario no encontrado', 
+        data: null });
+    }
+    const usuarioFront = {
+      nombre: usuario.nombre,
+      correo: usuario.correo,
+      imagen: usuario.imagen,
+    };
+   return res.status(200).json({
+      success: true,
+      msg: 'Usuario encontrado',
+      data: usuarioFront,
+    });
+  } catch (err) {
+    return res.status(401).json({
+      succes:false, 
+      msg: 'Token no válido', 
+      data: null 
+    });
+  }
+}
 
 module.exports = {
     login,
     register,
     validarUsuario,
     linkedinLogin,
-    googleLogin
+    googleLogin,
+    getUser
 }

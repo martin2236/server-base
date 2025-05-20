@@ -15,10 +15,10 @@ const esEmailUnico = async(correo) =>{
 }
 
 const esUnUsuarioRegistrado = async(id) =>{
-  const UsuarioExiste = await Usuario.findByPk(id);
-    if(!UsuarioExiste){
-        throw new Error(`el id ${id} no pertenece a ningun usuario`)
-    }
+  const user = await Usuario.findByPk(id);
+  if (!user) {
+    throw new Error(`El usuario no se encuentra registrado`)
+  }
 }
 
 module.exports = {
