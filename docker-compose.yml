@@ -1,6 +1,6 @@
 services:
   mysql:
-    container_name: mysqldb
+    container_name: server-base-db
     image: mysql:8
     restart: always
     environment:
@@ -21,7 +21,7 @@ services:
       - .:/app
       - /app/node_modules
       - ./src/uploads:/app/src/uploads
-    container_name: portfolio-back
+    container_name: server-base
     ports:
       - ${PORT}:${PORT}
     depends_on:

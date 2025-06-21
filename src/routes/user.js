@@ -13,7 +13,10 @@ router.get('/:id', passport.authenticate('bearer', { session: false }), userGet)
 
 router.get('/image/:nombre',passport.authenticate('bearer', { session: false }), userProfileImage);
 
-router.get('/', passport.authenticate('bearer', { session: false }), usersGet);
+router.get('/', [
+    passport.authenticate('bearer', { session: false }),
+    validarAcceso({rolesPermitidos:[2,3]})
+], usersGet);
 
 router.put('/editar',[ 
     passport.authenticate('bearer', { session: false }),
@@ -22,12 +25,12 @@ router.put('/editar',[
     check('nombre', 'el nombre es obligatorio').not().isEmpty(),
     check('correo', 'el correo no es valido').isEmail(),
     validarCampos,
-    validarAcceso(3)
+    validarAcceso({minRol:3})
 ], userPut);
 
 router.delete('/delete/:id', [
     passport.authenticate('bearer', { session: false }),
-    validarAcceso(3)
+    validarAcceso({minRol:3})
 ], userDelete);
 
 module.exports = router;

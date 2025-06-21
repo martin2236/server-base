@@ -21,7 +21,6 @@ class Server {
         this.port = process.env.PORT
         this.authRoutes = "/api/auth";
         this.userRoutes = "/api/users";
-         this.mainRoutes = "/";
         this.conectarDb();
         this.middleware(); 
         this.routes()
@@ -38,7 +37,6 @@ class Server {
       }
 
     routes(){
-        this.app.use(this.mainRoutes, require('../routes/main'));
         this.app.use(this.authRoutes, authLimiter, require('../routes/auth'));
         this.app.use(this.userRoutes, require('../routes/user'));
     }

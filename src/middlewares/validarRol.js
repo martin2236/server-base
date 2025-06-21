@@ -1,3 +1,4 @@
+
 const { request, response } = require("express");
 const validarRol = (req = request, res = response, next)=>{
     if(!req.usuario){
